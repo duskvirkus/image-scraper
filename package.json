@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "mkdir images && node index.js"
+    "start": "npm run electron",
+    "electron": "electron index.js"
   },
   "author": "Violet Graham",
   "license": "GPL-3.0",
   "dependencies": {
     "dotenv": "^8.2.0",
     "puppeteer": "^2.0.0"
+  },
+  "devDependencies": {
+    "electron": "^7.1.7"
   }
 }

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Image Scraper</title>
+    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+    <link rel="stylesheet" href="./skeleton/css/skeleton.css">
+    <link rel="stylesheet" href="./skeleton/css/normalize.css">
+
+    <style>
+      h1 {
+        font-size: 4rem;
+      }
+      h2 {
+        font-size: 2rem;
+      }
+      .sr-only {
+        display: none;
+      }
+      .container {
+        margin-top: 5rem;
+      }
+    </style>
+  </head>
+
+  <div class="container">
+    <h1 class="sr-only">Image Scraper</h1>
+
+    <div>
+      <h2>Input</h2>
+      <form>
+  
+        <label for="site">Site:</label>
+        <select id="site">
+        </select>
+  
+        
+        <label for="url">URL:</label>
+        <input id="url">
+  
+        <button type="submit" class="button button-primary" onclick="begin()">Begin</button>
+      </form>
+    </div>
+
+    <div>
+      <h2>Status</h2>
+      <p>
+        Images downloaded: <span id="images-downloaded">0</span>
+      </p>
+    </div>
+  </div>
+
+
+  <script>
+
+    const sites = require('./sites.json');
+    const ipc = require('electron').ipcRenderer;
+
+    populateSites();
+
+    function populateSites() {
+      const siteDropdown = document.getElementById('site');
+
+      const sitesKeys = Object.keys(sites);
+      for (let i = 0; i < sitesKeys.length; ++i) {
+        const option = document.createElement('option');
+        option.innerHTML = sitesKeys[i];
+        siteDropdown.appendChild(option);
+      }
+
+      const option = document.createElement('option');
+      option.innerHTML = 'Custom';
+      option.setAttribute('disabled', true);
+      siteDropdown.appendChild(option);
+    }
+
+    function begin() {
+      const siteSelect = document.getElementById('site');
+      
+      const msg = {
+        site: siteSelect.options[siteSelect.selectedIndex].innerHTML,
+        urls: [
+          document.getElementById('url').value,
+        ],
+      }
+      ipc.send('scrap', msg);
+    }
+
+  </script>
+
+</html>

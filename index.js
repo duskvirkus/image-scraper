@@ -1,47 +1,51 @@
-require('dotenv').config();
+const {
+  app,
+  BrowserWindow,
+  ipcMain,
+} = require('electron');
 const puppeteer = require('puppeteer');
-const readline = require('readline');
 const fs = require('fs');
 
-const R = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
+let win;
 let imgCount = 0;
 
-(async () => {
-  console.log("Starting Image Scraper!");
+function init() {
+  createWindow();
+}
 
-  const url = process.env.URL ? process.env.URL : await humanInput("Enter URL: ");
-  const cutoff = process.env.CUTOFF ? process.env.CUTOFF : await humanInput("Enter cutoff page number: ");
+function createWindow () {
+  win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+
+  win.loadFile('index.html');
+}
+
+ipcMain.on('scrap', (event, msg) => {
+  console.log(JSON.stringify(msg));
+  scrapSite(msg);
+});
+
+async function scrapSite(data) {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
-  await scrapPages(url, page, cutoff);
+  switch(data.site) {
+    default:
+      for (let i = 0; i < data.urls.length; ++i) {
+        await scrapPage(page, data.urls[i]);
+      }
+  }
 
   await browser.close();
-  console.log("Done!")
-  process.exit(0);
-})();
-
-function humanInput(prompt) {
-  return new Promise((resolve, reject) => {
-    R.question(prompt, (answer) => {
-      resolve(answer);
-    });
-  });
+  console.log("done");
 }
 
-async function scrapPages(url, page, cutoff) {
-  for (let i = 1; i < cutoff; ++i) {
-    const modifiedUrl = url + '/page/' + i;
-    const end = await scrapPage(modifiedUrl, page);
-    if (end) break;
-  }
-}
-
-async function scrapPage(url, page) {
+async function scrapPage(page, url) {
   console.log("Scraping: " + url);
   await page.goto(url);
   const imgURLs = await getImageURLs(page);
@@ -69,3 +73,5 @@ async function downloadImages(urls, page) {
     fs.writeFile('images/' + imgCount++ + '.' + urlParts[urlParts.length - 1], await source.buffer(), err => err ? console.error(err) : (1));
   }
 }
+
+app.on('ready', init);
