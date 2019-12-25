@@ -1,6 +1,6 @@
-# Tumblr Image Scraper
+# Image Scraper
 
-Simple image scraper that is designed for use with tumblr.
+Simple image scraper for the web. Built in support for tumblr.
 
 ## Usage
 
@@ -9,19 +9,10 @@ git clone https://github.com/violetcraze/tumblr-image-scraper.git
 cd tumblr-image-scraper
 npm i
 npm start
-
-# You will be asked for a url here is an example
-https://tumblr.tumblr.com/
-
-# You'll be asked for a cutoff this is the number of pages it will look through
-100
-
-# Wait until it's done and find the images in /images
 ```
 
-If you would like you can specify a url and cutoff in a .env file like so:
+Then follow instructions in electron app.
 
-```
-URL=https://tumblr.tumblr.com/
-CUTOFF=100
-```
+## Contributing
+
+Mostly designed as a personal tool. And I haven't fixed most of the bugs. If you'd like to contribute by fixing bugs or expanding functionality that would be great.

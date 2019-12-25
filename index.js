@@ -32,6 +32,10 @@ ipcMain.on('scrap', (event, msg) => {
 });
 
 async function scrapSite(data) {
+  if (!fs.existsSync('./images')){
+    fs.mkdirSync('./images');
+  }
+
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
