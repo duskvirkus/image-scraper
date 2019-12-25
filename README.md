@@ -2,11 +2,13 @@
 
 Simple image scraper for the web. Built in support for tumblr.
 
+![screenshot of image scraper app running](./assets/screenshot.png)
+
 ## Usage
 
 ```bash
-git clone https://github.com/violetcraze/tumblr-image-scraper.git
-cd tumblr-image-scraper
+git clone https://github.com/violetcraze/image-scraper.git
+cd image-scraper
 npm i
 npm start
 ```
