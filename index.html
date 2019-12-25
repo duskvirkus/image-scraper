@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Image Scraper</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+    <link rel="stylesheet" href="./skeleton/css/skeleton.css">
+    <link rel="stylesheet" href="./skeleton/css/normalize.css">
+    <link rel="stylesheet" href="./assets/main.css">
+  </head>
+
+  <div class="container">
+    <h1 class="sr-only">Image Scraper</h1>
+
+    <div>
+      <h3>Instructions</h3>
+      <p>
+        Put one url per line. The program will search the webpage for images and download them.
+      </p>
+      <p id="tumblr-options">
+        Tumblr has multipage support. Put a space and a number after the url. This will only work on root pages that don't end in '/page/(a number)'
+      </p>
+    </div>
+
+    <div>
+      <h2>Input</h2>
+      <form>
+  
+        <label for="site">Site:</label>
+        <select id="site" onclick="updateOptions()">
+        </select>
+
+        <div class="row">
+          <div class="twelve columns">
+            <label for="urls">URLS:</label>
+            <textarea class="full-width" type="text" id="urls" rows="3"></textarea>
+          </div>
+        </div>
+  
+      </form>
+    </div>
+    <div class="row">
+      <div class="twelve columns">
+        <button class="button button-primary full-width" onclick="begin()">Begin</button>
+      </div>
+    </div>
+
+    <div>
+      <h2>Status</h2>
+      <p>
+        Images downloaded: <span id="images-downloaded">Not working yet.</span>
+      </p>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="./assets/app.js"></script>
+
+</html>
