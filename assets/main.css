@@ -1,0 +1,32 @@
+h1 {
+  font-size: 4rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 2rem;
+}
+
+.sr-only {
+  display: none;
+}
+
+.container {
+  margin-top: 5rem;
+}
+
+#tumblr-options {
+  height: 0px;
+  overflow: hidden;
+}
+
+#tumblr-options.active {
+  height: auto;
+}
+
+.full-width {
+  width: 100%;
+}

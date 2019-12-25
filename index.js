@@ -5,6 +5,7 @@ const {
 } = require('electron');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
+const sites = require('./sites.json');
 
 let win;
 let imgCount = 0;
@@ -35,14 +36,36 @@ async function scrapSite(data) {
   const page = await browser.newPage();
 
   switch(data.site) {
+    case 'tumblr.com':
+      for (let i = 0; i < data.urls.length; ++i) {
+        if (data.urls[i].pages) {
+          for (let j = 0; j < data.urls[i].pages; ++j) {
+            const url = pageUrl(data.urls[i].url, data.site, j);
+            console.log(url);
+            await scrapPage(page, url);
+          }
+        } else {
+          await scrapPage(page, data.urls[i].url);
+        }
+      }
+      break;
     default:
       for (let i = 0; i < data.urls.length; ++i) {
-        await scrapPage(page, data.urls[i]);
+        await scrapPage(page, data.urls[i].url);
       }
   }
 
   await browser.close();
   console.log("done");
+}
+
+function pageUrl(url, site, index) {
+  switch(site) {
+    case 'tumblr.com':
+      return url + (sites['tumblr.com'].pageFormat.replace('#', index));
+    default:
+      throw new Error("unknown page layout for " + site);
+  }
 }
 
 async function scrapPage(page, url) {

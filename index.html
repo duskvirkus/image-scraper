@@ -3,45 +3,47 @@
   <head>
     <meta charset="UTF-8">
     <title>Image Scraper</title>
-    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
 
     <link rel="stylesheet" href="./skeleton/css/skeleton.css">
     <link rel="stylesheet" href="./skeleton/css/normalize.css">
-
-    <style>
-      h1 {
-        font-size: 4rem;
-      }
-      h2 {
-        font-size: 2rem;
-      }
-      .sr-only {
-        display: none;
-      }
-      .container {
-        margin-top: 5rem;
-      }
-    </style>
+    <link rel="stylesheet" href="./assets/main.css">
   </head>
 
   <div class="container">
     <h1 class="sr-only">Image Scraper</h1>
 
     <div>
+      <h3>Instructions</h3>
+      <p>
+        Put one url per line. The program will search the webpage for images and download them.
+      </p>
+      <p id="tumblr-options">
+        Tumblr has multipage support. Put a space and a number after the url. This will only work on root pages that don't end in '/page/(a number)'
+      </p>
+    </div>
+
+    <div>
       <h2>Input</h2>
       <form>
   
         <label for="site">Site:</label>
-        <select id="site">
+        <select id="site" onclick="updateOptions()">
         </select>
+
+        <div class="row">
+          <div class="twelve columns">
+            <label for="urls">URLS:</label>
+            <textarea class="full-width" type="text" id="urls" rows="3"></textarea>
+          </div>
+        </div>
   
-        
-        <label for="url">URL:</label>
-        <input id="url">
-  
-        <button type="submit" class="button button-primary" onclick="begin()">Begin</button>
       </form>
+    </div>
+    <div class="row">
+      <div class="twelve columns">
+        <button class="button button-primary full-width" onclick="begin()">Begin</button>
+      </div>
     </div>
 
     <div>
@@ -52,42 +54,6 @@
     </div>
   </div>
 
-
-  <script>
-
-    const sites = require('./sites.json');
-    const ipc = require('electron').ipcRenderer;
-
-    populateSites();
-
-    function populateSites() {
-      const siteDropdown = document.getElementById('site');
-
-      const sitesKeys = Object.keys(sites);
-      for (let i = 0; i < sitesKeys.length; ++i) {
-        const option = document.createElement('option');
-        option.innerHTML = sitesKeys[i];
-        siteDropdown.appendChild(option);
-      }
-
-      const option = document.createElement('option');
-      option.innerHTML = 'Custom';
-      option.setAttribute('disabled', true);
-      siteDropdown.appendChild(option);
-    }
-
-    function begin() {
-      const siteSelect = document.getElementById('site');
-      
-      const msg = {
-        site: siteSelect.options[siteSelect.selectedIndex].innerHTML,
-        urls: [
-          document.getElementById('url').value,
-        ],
-      }
-      ipc.send('scrap', msg);
-    }
-
-  </script>
+  <script type="text/javascript" src="./assets/app.js"></script>
 
 </html>
