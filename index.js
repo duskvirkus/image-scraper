@@ -2,10 +2,15 @@ const {
   app,
   BrowserWindow,
   ipcMain,
+  dialog,
 } = require('electron');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const sites = require('./sites.json');
+const unhandled = require('electron-unhandled');
+unhandled({
+  showDialog: true,
+});
 
 let win;
 let imgCount = 0;
@@ -17,7 +22,7 @@ function init() {
 function createWindow () {
   win = new BrowserWindow({
     width: 800,
-    height: 600,
+    height: 700,
     webPreferences: {
       nodeIntegration: true
     }
@@ -26,9 +31,9 @@ function createWindow () {
   win.loadFile('index.html');
 }
 
-ipcMain.on('scrap', (event, msg) => {
+ipcMain.on('scrap', async (event, msg) => {
   console.log(JSON.stringify(msg));
-  scrapSite(msg);
+  await scrapSite(msg);
 });
 
 async function scrapSite(data) {
@@ -75,9 +80,10 @@ function pageUrl(url, site, index) {
 async function scrapPage(page, url) {
   console.log("Scraping: " + url);
   await page.goto(url);
-  const imgURLs = await getImageURLs(page);
+  let imgURLs = await getImageURLs(page);
+  imgURLs = imgURLs.filter(e => e != null);
   if (imgURLs.length == 0) {
-    return true;
+    throw new Error("Unable to find images at " + url);
   }
   await downloadImages(imgURLs, page);
 }
@@ -94,7 +100,9 @@ async function getImageURLs(page) {
 }
 
 async function downloadImages(urls, page) {
+  console.log(urls);
   for (let i = 0; i < urls.length; ++i) {
+    console.log(urls[i]);
     const source = await page.goto(urls[i]);
     const urlParts = urls[i].split('.');
     fs.writeFile('images/' + imgCount++ + '.' + urlParts[urlParts.length - 1], await source.buffer(), err => err ? console.error(err) : (1));

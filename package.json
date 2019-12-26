@@ -9,6 +9,7 @@
   "author": "Violet Graham",
   "license": "GPL-3.0",
   "dependencies": {
+    "electron-unhandled": "^3.0.1",
     "puppeteer": "^2.0.0"
   },
   "devDependencies": {
