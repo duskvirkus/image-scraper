@@ -1,5 +1,7 @@
 # Image Scraper
 
+⚠️⚠️⚠️ Deprecated! Please see [scraping-scripts repository](https://github.com/violetcraze/scraping-scripts) for my latest scraping stuff. ⚠️⚠️⚠️
+
 Simple image scraper for the web. Built in support for tumblr.
 
 ![screenshot of image scraper app running](./assets/screenshot.png)
